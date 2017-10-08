@@ -58,6 +58,8 @@ public class Problems {
 		
 		auntyMarry.addRelative(tisho, "son");
 		auntyMarry.printPerson();
+		
+		auntyMarry.printBrief();
 	}
 
 }

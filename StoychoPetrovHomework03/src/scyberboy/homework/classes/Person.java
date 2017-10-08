@@ -48,6 +48,10 @@ public class Person {
 		System.out.println( "That's me !\n" );
 	}
 	
+	public void printBrief () {
+		System.out.printf("%s %s, %d y.o. (%s)\n", firstName, lastName, age, gender);
+	}
+	
 	public void addRelative ( Person p, String rel ) {
 		
 		relative[nrRelatives] = p;
