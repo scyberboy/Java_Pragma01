@@ -5,7 +5,7 @@ import java.time.format.TextStyle;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Locale;
-
+import java.util.Vector;
 
 import scyberboy.homework.classes.Person;
 
@@ -24,7 +24,8 @@ public class BookStore {
 	private DayOfWeek[] openingDays = { DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY,
 			DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, null };
 
-	private ArrayList<Book> inventory;
+	private ArrayList<Book> inventory = new ArrayList<Book>();
+	private Vector<Integer> availability = new Vector<Integer>(1);
 
 	public void printOpeningHours() {
 		for (DayOfWeek dow : openingDays) {
@@ -100,6 +101,45 @@ public class BookStore {
 	}
 	
 	public void addBook(Book b) {
+		if( !inventory.contains(b) && inventory.add(b) ) {
+			// set initial qty of any new added book to 1
+			int index = inventory.indexOf(b);
+			availability.add(index,1);
+			System.out.println("added " + b);
+		}
+	}
+	
+	public void removeBook(Book b) {
+		if( inventory.contains(b)  ) {
+			// remove the availability of the book to be removed
+			int index = inventory.indexOf(b);
+			availability.remove(index);
+			inventory.remove(b);
+			System.out.println("removed " + b);
+		}
+	}
+	
+	public int getQty(Book b) {
+		int index = inventory.indexOf(b);
+		return ( index >= 0 ? availability.get(index): 0 );
+	}
+	
+	public void setQty(Book b, int qty) {
+		int index = inventory.indexOf(b);
+		if(index >= 0) {
+			availability.set(index, qty);
+		} else {
+			System.out.print("Not available in this bookstore: ");
+			b.print();
+		}
+	}
+
+	public void listInventory() {
+		for(Book b: inventory) {
+			int qty = getQty(b);
+			System.out.print(qty + " books available for selling: ");
+			b.print();
+		}
 		
 	}
 
