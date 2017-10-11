@@ -29,5 +29,10 @@ public class Rectangle {
 	public double getArea() {
 		return width * height;
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + " --- Rectangle(" + width + "," + height + ")";
+	}
 
 }
