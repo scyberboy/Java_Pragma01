@@ -1,6 +1,5 @@
 package scyberboy.lect01;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Demo {
