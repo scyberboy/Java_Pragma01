@@ -12,10 +12,10 @@
  */
 public class RandomGroupsGenerator {
 
-	private static final int GROUP_SIZE = 0;
+	private int groupSize = 0;
 	
 	RandomGroupsGenerator(Person[] people, int groupSize) {
-		GROUP_SIZE = groupSize;
+		this.groupSize = groupSize;
 	}
 
 }
