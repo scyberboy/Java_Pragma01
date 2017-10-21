@@ -12,9 +12,9 @@ import scyberboy.homework.classes.Person;
 public class Book {
 	
 	// instance (object) fields
-	private String isbn = "001-002-003-ABCD";
+	private String isbn;
 	private Person author;
-	private String title = "<empty title>";
+	private String title;
 	
 	
 	//// Constructors

@@ -19,6 +19,15 @@ public class Person {
 	Person[] friend = new Person[MAX_FRIENDS];
 	int nrFriends = 0;
 	
+	
+	
+	public Person(String firstName) {
+		this.firstName = firstName;
+	}
+	
+	public Person() {
+	}
+
 	public void printPerson () {
 		System.out.println("Hello, my name is " + firstName + " " + lastName);
 		System.out.println("A " + age + " years old of " + gender + " gender");
@@ -50,6 +59,10 @@ public class Person {
 	
 	public void printBrief () {
 		System.out.printf("%s %s, %d y.o. (%s)\n", firstName, lastName, age, gender);
+	}
+	
+	public String getBriefInfo() {
+		return String.format("%s %s, %d y.o. (%s)", firstName, lastName, age, gender);
 	}
 	
 	public void addRelative ( Person p, String rel ) {
