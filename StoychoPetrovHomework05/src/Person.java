@@ -1,6 +1,12 @@
 
 public class Person {
 		String name;
-		int pairNr = 0;
+		
+		public Person(String name) {
+			this.name = name;
+		}
+		public String toString() {
+			return name;
+		}
 	}
 
