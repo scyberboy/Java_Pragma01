@@ -88,7 +88,7 @@ public class DemoStrings {
 		System.out.println(blah);
 		
 		StringBuffer sb1 = new StringBuffer("blah");
-		
+		System.out.println(sb1);
 		
 	}
 
