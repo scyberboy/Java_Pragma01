@@ -12,26 +12,24 @@ import java.util.Random;
  */
 public class RandomGroupsGenerator {
 
-	private int minGroupSize;
-	private int maxGroupSize;
+	// Fields
+	private int groupSize;
 	private Object[] group;
-	
+
+	// Ctors
 	public RandomGroupsGenerator(Object[] arr) {
-		this(arr, 1, 3);
+		this(arr,2);
 	}
 
 	public RandomGroupsGenerator(Object[] arr, int groupSize) {
-		this(arr, groupSize, groupSize);
-	}
-	
-	public RandomGroupsGenerator(Object[] arr, int minGroupSize, int maxGroupSize) {
-
-		this.minGroupSize = minGroupSize;
-		this.maxGroupSize = maxGroupSize;
 		this.group = arr;
-		
+		this.groupSize = groupSize;
+				
 		shuffle();
 	}
+	
+	
+	// Methods
 	
 	private void swapElements(int a, int b) {
 		Object tmp = group[a];
@@ -41,37 +39,66 @@ public class RandomGroupsGenerator {
 	
 	public void printGroup() {
 		
-		for(int i = 0; i < group.length; i++) {
-			
-			System.out.println("Group[" + i + "]: ");
-			
-			for(int j = 0; j < minGroupSize; j++) {
-				
-				int index = (minGroupSize * i) + j;
-				System.out.print(group[index]);
-				if(j < minGroupSize - 1) {
-					System.out.print(", ");
-				} else {
-					System.out.println();
-				}
-				
-				
-			}
-			
-			
-		}
+		int numberOfGroups = group.length / groupSize;
+		int reminder = group.length % groupSize;
 		
+		if(reminder != 0) {
+			// uneven distribution - adjust nr of groups
+			if(reminder > groupSize / 2) {				
+				numberOfGroups++;
+			}			
+		}		
+		
+		// print 'em :)
+		int idx = 0;
+		int start = 0;
+		int end = 0;
+		
+		for(idx = 0; idx < numberOfGroups; idx++) {
+			
+			System.out.print("Group[" + (idx+1) + "]: ");
+			start = idx * groupSize;
+			end = start + groupSize;
+			// if it's last group - use last index (till the end of the grup), no matter what
+			// if the last group has less people than previous - go back to bounds
+			if(idx == numberOfGroups-1 || end > group.length) {
+				end = group.length;
+			}
+			String participants = createGroup(start,end);
+			System.out.println(participants);			
+		}		
+	}
+	
+	/**
+	 *  string consist of [start,end) from class member group(array)
+	 * @param start
+	 * @param end
+	 * @return comma separated list
+	 */
+	private String createGroup(int start, int end) {		
+		StringBuilder result = new StringBuilder();		
+		for(int i = start; i < end; i++ ) {
+			result.append(group[i]);			
+			if(i < end - 1) {
+				result.append(", ");
+			}
+		}		
+		return result.toString();		
+	}	
+
+	public void shuffle(int newGroupSize) {
+		this.groupSize = newGroupSize;
+		shuffle();
 	}
 	
 	public void shuffle() {
 		Random randomizer = new Random();
-		for(int n = 0; n <= group.length/2; n++) {
-			
+		for(int n = 0; n <= group.length/2; n++) {			
 			int i = randomizer.nextInt(Integer.MAX_VALUE) % group.length;
-			int j = randomizer.nextInt(Integer.MAX_VALUE) % group.length;
-			
+			int j = randomizer.nextInt(Integer.MAX_VALUE) % group.length;			
 			swapElements(i, j);
 		}	
-	}
+	}	
+	
 
 }
