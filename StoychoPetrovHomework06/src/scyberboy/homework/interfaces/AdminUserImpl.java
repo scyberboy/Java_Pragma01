@@ -29,6 +29,7 @@ public class AdminUserImpl extends UserImpl implements IAdminUser {
 		System.out.println("---------------------");
 	}
 	
+	
 	protected Date getRegisteredDate() {
 		return registeredDate;
 	}
