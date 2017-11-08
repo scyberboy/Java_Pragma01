@@ -2,7 +2,7 @@ package scyberboy.lect02;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 public class DemoMethodReference {
 
@@ -22,7 +22,15 @@ public class DemoMethodReference {
 		System.out.println(squares2);
 		
 		///
+		sides.stream().filter(x -> x % 2 == 0).forEach(System.out::println);
 		
+		// generate() - generates infinite stream...
+		Stream<Integer> s3 = Stream.generate( () -> 5 );
+		System.out.println(s3.findFirst());
+		
+		// iterate 
+		Stream<Integer> s4 = Stream.iterate( 3, x -> x + 2 );
+		System.out.println(s4.filter(x -> x > 5).findFirst());
 
 	}
 
