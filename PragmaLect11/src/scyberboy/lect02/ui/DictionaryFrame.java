@@ -63,7 +63,7 @@ public class DictionaryFrame extends JFrame {
 		scrollPane.setBounds(10, 100, 400, 350);
 		add(scrollPane);
 		
-		//JTable table = new JTable;
+		JTable table = new JTable();
 		
 		
 		DictionaryTableModel tableModel = new DictionaryTableModel();
@@ -77,8 +77,8 @@ public class DictionaryFrame extends JFrame {
 		header.set;
 		table.setTableHeader();*/
 		
-		//table.setModel(tableModel);
-		JTable table = new JTable
+		table.setModel(tableModel);
+//		JTable table = new JTable
 		
 		scrollPane.setViewportView(table);
 		
