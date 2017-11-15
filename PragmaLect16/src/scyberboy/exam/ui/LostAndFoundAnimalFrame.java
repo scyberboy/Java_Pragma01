@@ -1,18 +1,14 @@
 package scyberboy.exam.ui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 
+import scyberboy.exam.*;
 import scyberboy.exam.model.*;
 import scyberboy.exam.model.ui.*;
 import scyberboy.exam.persistance.*;
@@ -22,12 +18,15 @@ public class LostAndFoundAnimalFrame extends JFrame {
 	
 	private List<LostAndFoundAnimal> frameEntries;
 	private JTable table = new JTable();
-
+	//private Deque<LostAndFoundAnimal> undoQueue = new ArrayDeque<LostAndFoundAnimal>();
+	//private Deque<Integer> undoQueueIdx = new ArrayDeque<Integer>();
+	private Deque<ArrayList<UndoEntry>> undoQueue = new ArrayDeque<>();
+	
 	public LostAndFoundAnimalFrame() {
 		super("Lost & Found Animal Bulletin Board");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(null);
-		setBounds(100, 100, 1200, 850);
+		setBounds(50, 50, 1200, 1000);
 		
 		frameEntries = new ArrayList<> (); 
 		createUI();
@@ -37,7 +36,7 @@ public class LostAndFoundAnimalFrame extends JFrame {
 		
 		// pane for the table
 		JScrollPane pane = new JScrollPane();
-		pane.setBounds(10, 10, 1150, 650);
+		pane.setBounds(10, 10, 1150, 800);
 		add(pane);
 		
 		// table itself (empty in the beginning)
@@ -53,7 +52,9 @@ public class LostAndFoundAnimalFrame extends JFrame {
 		
 		// open
 		JButton open = new JButton("Open");
-		open.setBounds(20, 720, 100, 30);
+		open.setMnemonic(KeyEvent.VK_O);
+		
+		open.setBounds(20, 880, 100, 30);
 		add(open);
 		
 		open.addActionListener(new ActionListener() {			
@@ -66,7 +67,9 @@ public class LostAndFoundAnimalFrame extends JFrame {
 		
 		// save
 		JButton save = new JButton("Save");
-		save.setBounds(150, 720, 100, 30);
+		save.setMnemonic(KeyEvent.VK_S);
+		
+		save.setBounds(150, 880, 100, 30);
 		add(save);
 		
 		save.addActionListener(new ActionListener() {			
@@ -78,7 +81,9 @@ public class LostAndFoundAnimalFrame extends JFrame {
 		
 		// delete
 		JButton delete = new JButton("Delete");
-		delete.setBounds(290, 720, 100, 30);
+		delete.setMnemonic(KeyEvent.VK_D);
+		
+		delete.setBounds(290, 880, 100, 30);
 		add(delete);
 		
 		delete.addActionListener(new ActionListener() {			
@@ -86,6 +91,24 @@ public class LostAndFoundAnimalFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {				
 				delete();
 				model.setEntries(frameEntries);
+			}
+
+		});
+		
+		// undo
+		JButton undo = new JButton("Undo");
+		undo.setMnemonic(KeyEvent.VK_U);
+		
+		undo.setBounds(430, 880, 100, 30);
+		add(undo);
+		
+		undo.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {				
+				if( ! undoQueue.isEmpty() ) {
+					undo();
+					model.setEntries(frameEntries);
+				}
 			}	
 		});
 		
@@ -121,9 +144,31 @@ public class LostAndFoundAnimalFrame extends JFrame {
 	}	
 	
 	private void delete() {
-		int rowIndex = table.getSelectedRow();
-		if(rowIndex != -1) {
-			frameEntries.remove(rowIndex);
+		int[] rowIndexes = table.getSelectedRows();
+		if(rowIndexes.length > 0) {
+			ArrayList<UndoEntry> delList = new ArrayList<>();
+			for( int i = rowIndexes.length-1 ; i >= 0 ; i-- ) {
+				int idx = rowIndexes[i];
+				LostAndFoundAnimal entry = frameEntries.remove(idx);
+				
+				UndoEntry delEntry = new UndoEntry();
+				delEntry.elem = entry;
+				delEntry.index = idx;
+				
+				delList.add(delEntry);
+				
+			}
+			undoQueue.push(delList);
 		}
-	}		
+	}
+	
+	private void undo() {
+		//frameEntries.add(undoQueue.pop());
+		//frameEntries.add(undoQueueIdx.pop(), undoQueue.pop()); //to preserve the initial order... 
+		ArrayList<UndoEntry> undoList = undoQueue.pop();
+		Collections.reverse(undoList);
+		undoList.forEach( entry -> {
+			frameEntries.add(entry.index, (LostAndFoundAnimal) entry.elem);
+		});
+	}
 }
